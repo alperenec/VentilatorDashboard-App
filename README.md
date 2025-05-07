@@ -5,9 +5,17 @@
 ---
 
 ## 📌 Overview
-Ventilator Dashboard is a **real-time monitoring system** designed to track and display ventilator data from multiple patients simultaneously. It leverages **MQTT** for efficient data transmission, processes incoming ventilator metrics on the backend, and provides an interactive UI that updates live using **SignalR**. This system helps healthcare professionals monitor critical patient parameters in real-time, improving decision-making and patient care.
+Ventilator Dashboard is a real-time monitoring system designed to track and display ventilator data from multiple patients simultaneously across hospital departments. The system combines data from two sources:
+
+**Hospital API Integration** - Connects to hospital information systems via REST API
+
+**MQTT Device Monitoring** - Direct real-time data from ventilator devices
+
+
+This dual-source approach provides comprehensive monitoring with both administrative context and live medical device data, helping healthcare professionals monitor critical patient parameters in real-time.
 </hr>
 
+![image](https://github.com/user-attachments/assets/311c0027-a141-4638-b2e4-3bdd795a3c39)
 
 https://github.com/user-attachments/assets/dc329924-c694-41ad-8a8e-6566eb2ac2a9
 
@@ -24,53 +32,42 @@ https://github.com/user-attachments/assets/dc329924-c694-41ad-8a8e-6566eb2ac2a9
 ---
 
 ## ⚙️ How It Works
-1️⃣ **Data Collection via MQTT** 📡  
-   - Ventilators send **HL7-based** messages over MQTT.
-   - The backend subscribes to the topic (`hl7/ventilator`) to receive these messages.
 
-2️⃣ **Processing & Storage** 🗄️  
-   - The backend extracts relevant ventilator parameters from HL7 messages.
-   - Data is structured and processed for real-time visualization.
+**1️⃣ Multi-Source Data Collection**
 
-3️⃣ **Real-Time UI Updates** 🖥️  
-   - The processed data is pushed to the frontend using **SignalR**.
-   - The UI dynamically updates without needing a full page refresh.
+**Hospital API Integration 🏥**
+
+Dashboard connects to hospital information system via REST API
+Retrieves department structure and ventilator configuration
+Uses secure token-based authentication
+Refreshes data periodically to maintain synchronization
+
+**Direct Device Monitoring via MQTT 📡**
+
+Ventilators send HL7-based messages over MQTT
+The backend subscribes to department-specific topics (hl7/ventilator/{department_id})
+Processes incoming data in real-time for immediate display
+
+**2️⃣ Processing & Storage 🗄️**
+
+Backend parses HL7 messages from different ventilator manufacturers
+Data is structured and normalized for consistent display
+Departmental organization maintains clinical workflow structure
+
+**3️⃣ Real-Time UI Updates 🖥️**
+
+Processed data is pushed to the frontend using SignalR
+UI dynamically updates without needing page refreshes
+Visual indicators differentiate between API and MQTT data sources
 
 ---
 
 ## 🛠️ Technologies Used
-- **Backend**: ASP.NET Core, MQTTnet, SignalR
-- **Frontend**: JavaScript (Vanilla JS), HTML, CSS
-- **Messaging**: MQTT (Message Queuing Telemetry Transport)
-- **Data Processing**: HL7 message parsing
 
+**Backend:** ASP.NET Core, MQTTnet, SignalR, RESTful API
 
----
+**Frontend:** JavaScript (Vanilla JS), HTML, CSS
 
-## 📂 Project Files & Responsibilities
-### 🏷️ Backend Services
-- **`MQTTService.cs`** → Handles MQTT connection, subscribes to ventilator data topic, and processes incoming messages.
-- **`MqttBackgroundService.cs`** → A background service that maintains the MQTT connection and ensures data flow.
-- **`VentilatorDataProcessor.cs`** → Parses HL7 messages received via MQTT, extracts key ventilator metrics, and stores them for further use.
-- **`VentilatorDataSenderService.cs`** → Sends processed ventilator data to the frontend using SignalR for real-time updates.
-- **`RandomDataService.cs`** → Generates random ventilator data for testing purposes.
+**Communication:** MQTT, SignalR, HTTP/REST
 
-### 🏷️ Frontend & UI
-- **`site.js`** → Manages real-time updates via SignalR, processes incoming data, and updates the UI dynamically.
-- **`site.css`** → Defines the styling for the ventilator dashboard, ensuring a responsive design.
-- **`Index.cshtml`** → The main frontend page where ventilator data is displayed.
-
-### 🏷️ SignalR & API
-- **`VentilatorDataHub.cs`** → A SignalR hub that facilitates real-time communication between the backend and frontend.
-- **`Program.cs`** → Configures the application, including services, CORS policies, and SignalR setup.
-- **`appsettings.json`** → Contains application configurations, including MQTT broker settings.
-
-
----
-
-## 🏗️ System Architecture
-```
-[Ventilator Devices] → (MQTT Broker) → [Backend Service] → (SignalR) → [Frontend Dashboard]
-```
-
----
+**Data Processing:** HL7 message parsing
