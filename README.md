@@ -15,9 +15,7 @@ Ventilator Dashboard is a real-time monitoring system designed to track and disp
 This dual-source approach provides comprehensive monitoring with both administrative context and live medical device data, helping healthcare professionals monitor critical patient parameters in real-time.
 </hr>
 
-![image](https://github.com/user-attachments/assets/311c0027-a141-4638-b2e4-3bdd795a3c39)
 
-https://github.com/user-attachments/assets/dc329924-c694-41ad-8a8e-6566eb2ac2a9
 
 
 ---
